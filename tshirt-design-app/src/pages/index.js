@@ -1,4 +1,5 @@
 import React from "react";
+import { useReducer } from "react";
 import {
   BrowserRouter as Router,
   Switch,
@@ -6,11 +7,45 @@ import {
   Link
 } from "react-router-dom";
 
-import Orderseh from '../pages/orders'
+import Orders from '../pages/orders'
+
+import OrdersContext from '../context/orderContext'
+import OrderReducer from '../context/orderReducer'
 
 export default function App() {
+
+  const   initialState = {
+    orders:[{
+      orders:[{
+        id : '20',
+        test : "Hello World"
+      }]
+    }]
+  }
+
+  const [state,dispatch] = useReducer(OrderReducer,initialState)
+
+  const addOrder = order =>{
+    dispatch({
+      type : "ADD_ORDER",
+      payload : {
+        id : "New",
+        test : "Newwww"
+      }
+    })
+  }
+
+
+
   return (
-    <Router>
+
+    
+    
+    <OrdersContext.Provider
+      value = {{
+        orders: state.orders}}
+    >
+      <Router>
       <div>
         <nav>
           <ul>
@@ -19,6 +54,8 @@ export default function App() {
             </li>
             <li>
               <Link to="/orders">Orders</Link>
+              {JSON.stringify(state)}
+              <button onClick={addOrder}> Add Order</button>
             </li>
           
           </ul>
@@ -28,7 +65,7 @@ export default function App() {
             renders the first one that matches the current URL. */}
         <Switch>
           <Route path="/orders">
-            <Orderseh />
+            <Orders />
           </Route>
         
           <Route path="/">
@@ -37,11 +74,14 @@ export default function App() {
         </Switch>
       </div>
     </Router>
+    </OrdersContext.Provider>
+    
   );
 }
 
 function Home() {
   return <h2>Home</h2>;
+ 
 }
 
 
