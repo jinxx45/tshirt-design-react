@@ -1,91 +1,49 @@
-import React from "react";
-import { useReducer } from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from "react-router-dom";
+import React, { useReducer, useContext } from "react"
+import { Link } from "gatsby"
+import "antd/dist/antd.css"
+import "../style.css"
+import { OrdersContext } from "../context/ordersContext"
+import OrdersReducer from "../context/ordersReducers"
+import { ADD_ORDER } from "../context/types"
+import Customization from "../components/Customization"
 
-import Orders from '../pages/orders'
+const initialState = {
+  orders: [
+    {
+      id: 2,
+      content: "Demo",
+    },
+  ],
+}
 
-import OrdersContext from '../context/orderContext'
-import OrderReducer from '../context/orderReducer'
+const IndexPage = props => {
+  // const [state, dispatch] = useReducer(OrdersReducer, initialState)
 
-export default function App() {
-
-  const   initialState = {
-    orders:[{
-      orders:[{
-        id : '20',
-        test : "Hello World"
-      }]
-    }]
-  }
-
-  const [state,dispatch] = useReducer(OrderReducer,initialState)
-
-  const addOrder = order =>{
-    dispatch({
-      type : "ADD_ORDER",
-      payload : {
-        id : "New",
-        test : "Newwww"
-      }
-    })
-  }
-
-
-
+  // const addOrder = order => {
+  //   dispatch({
+  //     type: ADD_ORDER,
+  //     payload: {
+  //       id: 21,
+  //       content: "How's it going?",
+  //     },
+  //   })
+  // }
+  const context = useContext(OrdersContext)
   return (
-
-    
-    
-    <OrdersContext.Provider
-      value = {{
-        orders: state.orders}}
-    >
-      <Router>
-      <div>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/orders">Orders</Link>
-              {JSON.stringify(state)}
-              <button onClick={addOrder}> Add Order</button>
-            </li>
-          
-          </ul>
-        </nav>
-
-        {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
-        <Switch>
-          <Route path="/orders">
-            <Orders />
-          </Route>
-        
-          <Route path="/">
-            <Home />
-          </Route>
-        </Switch>
+    <>
+      <div className="navbarStyle">
+        <Link to="/" className="rl">
+          Shirt-Design
+        </Link>
+        <Link to="/orders" className="rl">
+          Orders
+        </Link>
       </div>
-    </Router>
-    </OrdersContext.Provider>
-    
-  );
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <Customization />
+      </div>
+    </>
+  )
 }
 
-function Home() {
-  return <h2>Home</h2>;
- 
-}
-
-
-
-function Users() {
-  return <h2>Users</h2>;
-}
+export default IndexPage
